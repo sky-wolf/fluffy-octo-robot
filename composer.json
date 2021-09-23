@@ -1,0 +1,17 @@
+{
+    "name": "werewolfe/framwork",
+    "authors": [
+        {
+            "name": "Anders",
+            "email": "drako@spray.se"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "app\\": "./"
+        }
+    },
+    "require": {
+        "php-di/php-di": "^6.3"
+    }
+}
