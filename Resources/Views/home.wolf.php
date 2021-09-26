@@ -26,11 +26,15 @@
 @endfor
 
 @foreach ($users as $user)
-    <p>This is user {{ $user->id }}</p>
+    <p>This is user 1 {{ $user->id }}</p>
+    
+@endforeach
+<p> end test</p>
+@foreach ($products as $product)
+    <p>This is product 11 {{ $product->id }}</p>
+    
 @endforeach
 
 
 
-
-<p> end test</p>
 @endsection

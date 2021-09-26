@@ -31,20 +31,21 @@ class HomeController extends Controller
         /* echo '<pre>';
         var_dump($_SERVER);
         echo '</pre>'; */
-
+/*["HTTP_REFERER"]=>
+  string(29) "http://localhost:8101/contact"
+  ["REQUEST_URI"]=>
+  string(8) "/contact"
+           $data = validate($_POST, [
+            'name' => ,
+            'email' => ['required', 'email'],
+            'password' => ['required', 'min:10'],
+        ]); */
         $Validation = $this->validate([
-            'email-1-1' => 'email()',
-            'name1-1' => 'alpha',
-            'date1-1' => 'date()',
-            'ort1-1' => 'alpha',
-            'grupp1-1' => 'alpha',
-            'email-1-2' => 'email()',
-            'name1-2' => 'alpha',
-            'date1-2' => 'date()',
-            'ort1-2' => 'alpha',
-            'grupp1-2' => 'alpha']);
-        /* $Validation = $this->validate(/* , AuthForm::signup() ); */
-        echo 'Hanterar sickad data';//$this->view("contact");
+            'email' => ['required','email'],
+            'password' => [ 'required','min:5']
+        ]);
+        
+        echo 'Hanterar sickad data';
 
     }
     

@@ -7,7 +7,7 @@ class Template
 {
 	static $blocks = array();
 	static $path = '/Resources/Views' . '/';
-	static $cachepath = 'cache' . '/';
+	static $cachepath = 'cache2' . '/';
 	static $cacheenabled = FALSE;
 
 	protected static function CleanPath($file)
@@ -21,11 +21,13 @@ class Template
    
    static function rendering($file, $params = array())
    {
-		$cached = realpath(self::CachePath($file));
-	   	if ( !self::$cacheenabled || file_exists(self::CleanPath($file)) ) 
-	   	{
+		/* echo $cached = realpath(self::CachePath($file));
+
+	   	if ( self::$cacheenabled || file_exists(self::CleanPath($file)) ) 
+	   	{ */
+			   
 			$content = self::compile($file);
-			file_put_contents($cached, $content);
+		/* 	file_put_contents($cached, $content);
 		}
 			
 		extract($params, EXTR_SKIP);
@@ -38,12 +40,14 @@ class Template
 			array("id" => '3'),
 			array("id" => '4'),
 			array("id" => '5')
-		);
+		); */
 			
 	
 		
 		ob_start();
-			include($cached);
+
+			print_r($content);
+			/* include($cached); */
 			$contents = ob_get_contents();
 		ob_end_clean();
 
@@ -65,8 +69,8 @@ class Template
 		$code = self::CompileSwitch($code);
 		$code = self::CompileEndSwitch($code);
 		$code = self::CompileForeach($code);
-		$code = self::CompileEndForeach($code);
-		/* $code = self::CompileForelse($code);
+		/*$code = self::CompileEndForeach($code);
+		 $code = self::CompileForelse($code);
 		$code = self::CompileEmpty($code);
 		$code = self::CompileEndForelse($code); */
 		$code = self::CompileFor($code);
@@ -77,7 +81,8 @@ class Template
 		$code = self::compileEscapedEchos($code);
 		$code = self::compileEchos($code);
 		$code = self::compilePHP($code);
-		
+		/* echo $code; */
+		/* die; */
         return $code; 
    }
 
@@ -239,15 +244,41 @@ class Template
 
 	static function CompileForeach($code)
 	{
-		return preg_replace('/\@foreach\s?\(((?<=\().*(?=\)))\)/i', '<?php foreach($1): ?>', $code);
-	}
+		preg_match_all('/\@foreach\s?\((.*?)\)(.*?)\@endforeach/is', $code, $matches, PREG_SET_ORDER);
+		/* echo '<pre>';
+		var_dump ($matches);
+		echo '</pre>'; */
 
+		if(!empty($matches[0]))
+		{
+			foreach($matches as $value)
+			{  
+				if (!array_key_exists($value[1], self::$blocks)) self::$blocks[$value[1]] = '';
+				if (strpos($value[2], '@parent') === false) {
+					self::$blocks[$value[1]] = $value[2];
+				} else {
+					self::$blocks[$value[1]] = str_replace('@parent', self::$blocks[$value[1]], $value[2]);
+				}
+
+				$lockal = preg_replace('~\{{\s*(.+?)\s*\}}~is', '<?php echo $1; ?>', $value[2]);
+				$replace = '<?php foreach('. $value[1] .' ): ?><br>' . $lockal . '<br><?php endforeach; ?>';
+				$code = str_replace($value[0], $replace, $code);
+				/* 
+		
+				$pattern =  "/\@foreach\s?\(\'$value[1]\''\)(.*?)\@endforeach/is";
+				
+				$code = preg_replace($pattern, '$replace', $code); */
+			}
+		}
+		return $code;
+	}
+/*
 	static function CompileEndForeach($code)
 	{
 		return preg_replace('/\@endforeach/i', '<?php endforeach; ?>', $code);
 	}
 
-	/* static function CompileForelse($code)
+	 static function CompileForelse($code)
 	{
 		return preg_replace('/\@forelse\s?\(((?<=\().*(?=\)))\)/i', '<?php foreach($1): ?>', $code);
 	}
@@ -275,44 +306,7 @@ class Template
 	/*static function CompileEscapedEchos($code)
 	{
 		return preg_replace('/\@default/i', '<?php default: ?>', $code);
-	} 
-	static function CompileEscapedEchos($code)
-	{
-		return preg_replace('/\@default/i', '<?php default: ?>', $code);
-	} 
-	static function CompileEscapedEchos($code)
-	{
-		return preg_replace('/\@default/i', '<?php default: ?>', $code);
-	} 
-	static function CompileEscapedEchos($code)
-	{
-		return preg_replace('/\@default/i', '<?php default: ?>', $code);
-	} 
-	static function CompileEscapedEchos($code)
-	{
-		return preg_replace('/\@default/i', '<?php default: ?>', $code);
-	} 
-	static function CompileEscapedEchos($code)
-	{
-		return preg_replace('/\@default/i', '<?php default: ?>', $code);
-	} 
-	static function CompileEscapedEchos($code)
-	{
-		return preg_replace('/\@default/i', '<?php default: ?>', $code);
-	} 
-	static function CompileEscapedEchos($code)
-	{
-		return preg_replace('/\@default/i', '<?php default: ?>', $code);
-	} 
-	static function CompileEscapedEchos($code)
-	{
-		return preg_replace('/\@default/i', '<?php default: ?>', $code);
-	} 
-	static function CompileEscapedEchos($code)
-	{
-		return preg_replace('/\@default/i', '<?php default: ?>', $code);
-	} 
-*/
+	}*/
 	
 
 	static function CompileEscapedEchos($code)
@@ -322,8 +316,8 @@ class Template
 
 	static function CompileEchos($code)
 	{
-		return preg_replace('~\{{\s*(.+?)\s*\}}~is', '<?php echo $1 ?>', $code);
-	}
+		return preg_replace('~\{{\s*(.+?)\s*\}}~is', '<?php echo htmlentities($1, ENT_QUOTES, \'UTF-8\'); ?>', $code);
+	}/* <?php print $this->escape(' . $matches[1] . '); ?> */
 
 	static function CompilePhp($code)
 	{
