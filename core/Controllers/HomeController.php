@@ -42,7 +42,7 @@ class HomeController extends Controller
         ]); */
         $Validation = $this->validate([
             'email' => ['required','email'],
-            'password' => [ 'required','min:5']
+            'password' => [ 'required','min:15']
         ]);
         
         echo 'Hanterar sickad data';

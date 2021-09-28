@@ -3,16 +3,15 @@
 namespace app\core\Validation;
 
 use app\core\Request;
-use app\core\Validation\Rule\Rule;
 
 class Validator
 {
     protected array $rules = [];
 
     public function __construct() {
-       $this->addRule('required', new Rule\RequiredRule());
-        //$this->addRule('email', new Rule\EmailRule());
-        //$this->addRule('min', new Rule\MinRule());
+        $this->addRule('required', new RequiredRule());
+        $this->addRule('email', new EmailRule());
+        $this->addRule('min', new MinRule());
     }
 
     public function addRule(string $alias, Rule $rule)
@@ -24,9 +23,6 @@ class Validator
     {
         $errors = [];
         $data = $request->getBody();
-        echo '<pre>';
-		var_dump ($this->rules);
-		echo '</pre>';
         
         foreach ($rules as $field => $rulesForField) 
         {
@@ -51,28 +47,23 @@ class Validator
                         $errors[$field] = [];
                     }
 
-                    array_push($errors[$field], $processor->getMassage($data, $field, $params));
-                }
+                    array_push($errors[$field], $processor->getMessage($data, $field, $params));
+                }    
+            }
+        }
             
-            }
-           echo '<br>';
-            /* try
-            {
-                $rule->setName(ucfirst($field))->assert($request->getParam($field));
-            }
-            catch (NestedValidationException $e)
-            {
-                $this->errors[$field] = $e->getMessages();
-            } */
-        }
-
+        if(count($errors))
+        {   
+            $test = array_intersect_key($data, $rules);
+            echo '<pre>';
+            var_dump ($errors);
+            var_dump ($test);
+            echo '</pre>';
+        }    
+            
         
-        if(($request->getParam('password') === $request->getParam('repeteralosenord')))
-        {
-            $this->errors['repeteralosenord'] = 'Lösenordet var inte samma';
-        }
 
-        $_SESSION['errors'] = $this->errors;
+        $_SESSION['errors'] = $errors;
 
         return $this;
     }
