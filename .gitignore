@@ -7,4 +7,6 @@
 .env
 .phpunit.result.cache
 npm-debug.log
+debug.log
 yarn-error.log
+docker-composer.yml

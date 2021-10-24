@@ -1,8 +1,8 @@
 <?php
 
-namespace app\core\Validation;
+namespace Framework\Validation;
 
-use app\core\Request;
+use Framework\Request;
 
 class Validator
 {
@@ -55,17 +55,17 @@ class Validator
         if(count($errors))
         {   
             $test = array_intersect_key($data, $rules);
-            echo '<pre>';
+            /* echo '<pre>';
             var_dump ($errors);
             var_dump ($test);
-            echo '</pre>';
+            echo '</pre>'; */
         }    
             
         
 
         $_SESSION['errors'] = $errors;
 
-        return $this;
+        /* return $this; */
     }
 
     public function fails()

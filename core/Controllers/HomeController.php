@@ -1,9 +1,9 @@
 <?php
 
-namespace app\core\Controllers;
-use app\core\Request;
-use app\core\Session\Session;
-use app\core\Application;
+namespace Framework\Controllers;
+use Framework\Request;
+use Framework\Session\Session;
+use Framework\Application;
 
 class HomeController extends Controller
 {

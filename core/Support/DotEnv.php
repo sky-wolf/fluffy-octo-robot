@@ -1,6 +1,6 @@
 <?php
 
-namespace app\core\Config;
+namespace Framework\Support;
 
 
 class DotEnv 
@@ -8,8 +8,10 @@ class DotEnv
     protected $path;
 
 
-    public function __construct(string $path)
+    public function __construct()
     {
+        $path = __DIR__.'/../../.env';
+
         if(!file_exists($path))
             throw new \InvalidArgumentException(sprintf('%s does not exist', $path));
         

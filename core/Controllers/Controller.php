@@ -1,12 +1,12 @@
 <?php
 
-namespace app\core\controllers;
+namespace Framework\controllers;
 
-use app\core\Validation\Validator;
-use app\core\View\View;
-use app\core\Response;
-use app\core\Request;
-use app\core\Application;
+use Framework\Validation\Validator;
+use Framework\View\View;
+use Framework\Response;
+use Framework\Request;
+use Framework\Application;
 
 class Controller
 {

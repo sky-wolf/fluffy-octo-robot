@@ -1,9 +1,9 @@
 <?php
-namespace app\core;
-use app\core\routes\Router;
-use app\core\Database\Database;
+namespace Framework;
+use Framework\routes\Router;
+//use Framework\Database\Database;
 
-use app\core\Session\Session;
+use Framework\Session\Session;
 
 class Application
 {
@@ -11,7 +11,7 @@ class Application
     public Router $router;
     public Request $request;
     public Response $response;
-    public Database $db;
+    //public Database $db;
     public Session $session;
     public static Application $app;
     

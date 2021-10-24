@@ -31,11 +31,44 @@
       </div>
     </nav>
     
-  <main>
-  <h1>Home</h1>
+<h1>Home</h1>
 <p>Welcome to the home page!</p>
-  </main>
-  
+<?php if(count($users) === 1): ?>
+<p>I have one record!</p>
+<?php elseif(count($users) > 1): ?>
+<p>I have multiple records!</p>
+<?php else: ?>
+<p>I don't have any records!</p>
+<?php endif; ?>
+<?php switch ($a): ?>
+<?php case 1: ?>
+    <p>First case...</p>
+<?php break; ?>
+<?php case 2: ?>
+    <p>Second case...</p>
+<?php break; ?>
+
+<?php default: ?>
+    <p>Default case...</p>
+<?php endswitch; ?>
+<p></p>
+<?php for($i = 0; $i < 10; $i++): ?>
+<p>The current value is <?php echo htmlentities($i, ENT_QUOTES, 'UTF-8'); ?></p>
+<?php endfor; ?>
+
+<?php foreach($users as $user ): ?><br>
+    <p>This is user 1 <?php echo $user->id; ?></p>
+    
+<br><?php endforeach; ?>
+<p> end test</p>
+<?php foreach($products as $product ): ?><br>
+    <p>This is product 11 <?php echo $product->id; ?></p>
+    
+<br><?php endforeach; ?>
+
+
+
+
 
   </div>
 

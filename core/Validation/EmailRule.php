@@ -1,6 +1,6 @@
 <?php
 
-namespace app\core\Validation;
+namespace Framework\Validation;
 
 class EmailRule implements Rule 
 {

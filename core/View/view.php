@@ -1,8 +1,8 @@
 <?php
 
-namespace app\core\View;
+namespace Framework\View;
 
-use app\core\View\Template\Template;
+use Framework\View\Template\Template;
 
 
 class View

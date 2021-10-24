@@ -1,5 +1,5 @@
 <?php
-use app\core\routes\Router;
+use Framework\routes\Router;
 
 Router::get('/', ['HomeController', 'index']);
 Router::get('/contact', ['HomeController', 'contact']);

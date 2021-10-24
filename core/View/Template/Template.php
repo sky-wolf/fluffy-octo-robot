@@ -1,13 +1,13 @@
 <?php
 
-namespace app\core\View\Template;
-use app\core\Application;
+namespace Framework\View\Template;
+use Framework\Application;
 
 class Template
 {
 	static $blocks = array();
 	static $path = '/Resources/Views' . '/';
-	static $cachepath = 'cache2' . '/';
+	static $cachepath = 'cache' . '/';
 	static $cacheenabled = FALSE;
 
 	protected static function CleanPath($file)
@@ -16,38 +16,24 @@ class Template
    	}
 	protected static function CachePath($file)
    	{
-		return self::$cachepath . str_replace(array('.', '.php'), array('/',''), $file) .'.wolf.php';
+		return Application::$ROOT_DIR . self::$path . self::$cachepath . str_replace(array('.', '.php'), array('/',''), $file) .'.wolf.php';
    	}
    
    static function rendering($file, $params = array())
    {
-		/* echo $cached = realpath(self::CachePath($file));
+		$cached = self::CleanPath($file);
 
-	   	if ( self::$cacheenabled || file_exists(self::CleanPath($file)) ) 
-	   	{ */
-			   
+	   	if ( self::$cacheenabled || file_exists($cached) ) 
+	   	{ 
 			$content = self::compile($file);
-		/* 	file_put_contents($cached, $content);
+		 	file_put_contents($cached, $content);
 		}
 			
 		extract($params, EXTR_SKIP);
-
-		$a = 5;
-		
-		$users = array(
-			array("id" => '1'),
-			array("id" => '2'),
-			array("id" => '3'),
-			array("id" => '4'),
-			array("id" => '5')
-		); */
-			
-	
-		
+ 
 		ob_start();
-
-			print_r($content);
-			/* include($cached); */
+		
+			include($cached);
 			$contents = ob_get_contents();
 		ob_end_clean();
 

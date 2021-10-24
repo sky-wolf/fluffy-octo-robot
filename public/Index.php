@@ -1,7 +1,7 @@
 <?php
 
 require __DIR__.'/../vendor/autoload.php';
-use app\core\Application;
+use Framework\Application;
 
 $app = new Application(dirname(__DIR__));
 

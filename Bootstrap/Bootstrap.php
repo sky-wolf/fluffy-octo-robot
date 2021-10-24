@@ -1,6 +1,6 @@
 <?php
 
-namespace app\core\Bootstrap;
+namespace Bootstrap;
 session_start();
 
 //use DI\Container;

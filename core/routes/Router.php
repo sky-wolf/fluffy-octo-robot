@@ -1,15 +1,15 @@
 <?php
-namespace app\core\routes;
-use app\core\Application;
-use app\core\Request;
-use app\core\Response;
-use app\core\http;
-use app\core\controllers;
+namespace Framework\routes;
+use Framework\Application;
+use Framework\Request;
+use Framework\Response;
+use Framework\http;
+use Framework\controllers;
 
 class Router
 {
     protected array $routes = [];
-    protected $namespace = "app\core\Controllers\\";
+    protected $namespace = "Framework\Controllers\\";
     public Request $request;
     public Response $response;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace app\core\Validation;
+namespace Framework\Validation;
 
 class RequiredRule implements Rule 
 {
