@@ -1,6 +1,6 @@
 <?php
 
-namespace Framwork\Database\Migration\Field;
+namespace Framework\Database\Migration\Field;
 
 
 abstract class Field
@@ -25,5 +25,4 @@ abstract class Field
         $this->alter = true;
         return $this;
     }
-
 }

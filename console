@@ -6,7 +6,7 @@ use Symfony\Component\Console\Application;
 $application = new Application();
 
 
-$commands = require __DIR__ . '\app\Commands.php';
+$commands = require __DIR__ . '/app/Commands.php';
 
 foreach ($commands as $command)
 {

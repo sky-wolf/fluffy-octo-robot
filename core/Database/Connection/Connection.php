@@ -20,7 +20,7 @@ abstract class Connection
     /**
      * Start a new migration to ad a table
      */
-    abstract public function creatTabel(string $tabel);
+    abstract public function createTable(string $tabel);
 
     /**
      * 

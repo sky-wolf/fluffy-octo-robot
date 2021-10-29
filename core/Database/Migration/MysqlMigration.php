@@ -2,16 +2,16 @@
 
 namespace Framework\Database\Migration;
 
-use app\Database\Connection\MysqlConnection;
-use app\Database\Exception\MigrationException;
-use app\Database\Migration\Field\Field;
-use app\Database\Migration\Field\BoolField;
-use app\Database\Migration\Field\DateTimeField;
-use app\Database\Migration\Field\FloatField;
-use app\Database\Migration\Field\IdField;
-use app\Database\Migration\Field\IntField;
-use app\Database\Migration\Field\StringField;
-use app\Database\Migration\Field\TextField;
+use Framework\Database\Connection\MysqlConnection;
+use Framework\Database\Exception\MigrationException;
+use Framework\Database\Migration\Field\Field;
+use Framework\Database\Migration\Field\BoolField;
+use Framework\Database\Migration\Field\DateTimeField;
+use Framework\Database\Migration\Field\FloatField;
+use Framework\Database\Migration\Field\IdField;
+use Framework\Database\Migration\Field\IntField;
+use Framework\Database\Migration\Field\StringField;
+use Framework\Database\Migration\Field\TextField;
 
 class MysqlMigration extends Migration
 {
@@ -23,33 +23,33 @@ protected array  $drops = [];
 
     public function __construct(MysqlConnection $connectionl, string $table, string $type)
     {
-        $this->connection = $connection;
+        $this->connection = $connectionl;
         $this->table = $table;
         $this->type = $type;
     }
 
     public function execute()
     {
-        $fields = array_map(fn($field)=> StringForField($field), $fields);
+        $fields = array_map(fn($field)=> $this->StringForField($field), $this->fields);
 
         $primary = array_filter($this->fields, fn($field) => $field instanceof IdField);
-        $primaryKey = isset($primary[0]) ? "PRIMARY KEY (`{$primary[0]}`)" : '';
+        $primaryKey = isset($primary[0]) ? "PRIMARY KEY (`{$primary[0]->name}`)" : '';
 
         if($this->type === 'create')
         {
-            $fields = join(PHP_EOL, array_map(fn($field)=> "{$field}, ", $fields));
+            $fields = join(PHP_EOL, array_map(fn($field)=> "{$field},", $fields));
 
             $query = "
-                CREAT TABEL `{$this->table}`(
+                CREATE TABLE `{$this->table}`(
                     {$fields}
                     {$primaryKey}
-                )ENGINE=innoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;);
+                )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;);
             ";
         }
 
         if($this->type === 'alter')
         {
-            $fields = join(PHP_EOL, array_map(fn($field)=> "{$field}, ", $fields));
+            $fields = join(PHP_EOL, array_map(fn($field)=> "{$field};", $fields));
             $drops = join(PHP_EOL, array_map(fn($drop)=> "DROP COLUM `{$drop}`;", $this->drops));
 
             $query = "
@@ -59,20 +59,20 @@ protected array  $drops = [];
             ";
         }
 
-        $statement = $this->connection->pdo->prepare($query);
+        $statement = $this->connection->pdo()->prepare($query);
         $statement->execute();
     }
 
-    public function StringForField(Field $field): static
+    public function StringForField(Field $field): string
     {
-        $perfix = '';
+        $prefix = '';
 
         if($this->type === 'alter')
         {
             $perfix = 'ADD';
         }
 
-        if($this->alter)
+        if($field->alter)
         {
             $perfix = 'MODIFY';
         }
@@ -131,7 +131,28 @@ protected array  $drops = [];
 
         if($field instanceof IdField)
         {
-            $template = "{$prefix} `{$field->name}` int(11) unsigned NOT NULL AUTO_INCREMENT";
+            return "{$prefix} `{$field->name}` int(11) unsigned NOT NULL AUTO_INCREMENT";
+        }
+
+        if($field instanceof IntField)
+        {
+            $template = "{$prefix} `{$field->name}` int(11)";
+
+            if($field->nullable)
+            {
+                $template .= " DEFAULT NULL";
+            }
+
+            if ($field->default !== null)
+            {
+                $template .= " DEFAULT {$field->default}";
+            }
+            return $template;
+        }
+
+        if($field instanceof StringField)
+        {
+            $template = "{$prefix} `{$field->name}` varchar(255)";
 
             if($field->nullable)
             {

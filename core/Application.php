@@ -1,9 +1,9 @@
 <?php
 namespace Framework;
 use Framework\routes\Router;
-//use Framework\Database\Database;
 
 use Framework\Session\Session;
+use Framework\Support\DotEnv;
 
 class Application
 {
@@ -11,7 +11,7 @@ class Application
     public Router $router;
     public Request $request;
     public Response $response;
-    //public Database $db;
+
     public Session $session;
     public static Application $app;
     
@@ -19,10 +19,11 @@ class Application
 
     public function __construct($rootpath)
     {
+        (new DotEnv())->load();
         self::$app = $this;
         self::$ROOT_DIR = $rootpath;
         $this->request = new Request();
-        //$this->db = new Database();
+ 
         $this->response = new Response();
         $this->session = new Session();
         $this->router = new Router($this->request,$this->response);
@@ -30,6 +31,7 @@ class Application
 
     public function Run()
     {
-       $this->router->resolve();
+        
+        $this->router->resolve();
     }
 }

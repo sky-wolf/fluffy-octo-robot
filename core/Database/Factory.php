@@ -1,6 +1,6 @@
 <?php
 
-namespace Framwork\Database;
+namespace Framework\Database;
 use Framework\Database\Connection\Connection;
 use Framework\Database\Exception\ConnectionException;
 use Framework\Config\DotEnv;
@@ -19,8 +19,8 @@ class Factory
 
     public function connect(array $config)
     {
-        $absolutePathToEnvFile = Application::$ROOT_DIR . '/.env';
-        (new DotEnv($absolutePathToEnvFile))->load();
+        
+        (new DotEnv())->load();
 
         if(null !== getenv('DATABASE_Connect'))
         {

@@ -22,7 +22,7 @@ class MigrateCommand extends Command
 {
     protected static $defaultName = 'migrate';
 
-    protected function configurer()
+    protected function configure()
     {
         $this
             ->setDescription('Migrates the database')
@@ -33,7 +33,7 @@ class MigrateCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $current = getcwd();
-        $pattern = 'database/migrations/*.php';
+        $pattern = 'Database/Migrations/*.php';
 
         $paths = glob("{$current}/{$pattern}");
 
@@ -50,14 +50,16 @@ class MigrateCommand extends Command
 
             $connection->dropTables();
             $connection = $this->connection();
-        }
+        } 
 
-        if (!$connection->hasTable('migrations')) {
+        if (!$connection->hasTable('migrations')) 
+        {
             $output->writeln('Creating migrations table');
             $this->createMigrationsTable($connection);
         }
 
-        foreach ($paths as $path) {
+        foreach ($paths as $path) 
+        {
             [$prefix, $file] = explode('_', $path);
             [$class, $extension] = explode('.', $file);
 
@@ -89,10 +91,10 @@ class MigrateCommand extends Command
         
         (new DotEnv())->load();
 
-        if(getenv('DATABASE_Connect') === 'sqlite' )
+        /* if(getenv('DATABASE_Connect') === 'sqlite' )
         {
             return new SqliteConnection();
-        }
+        } */
 
         return new MysqlConnection();
     }

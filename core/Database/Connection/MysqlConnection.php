@@ -4,8 +4,13 @@ namespace Framework\Database\Connection;
 
 use Framework\Application;
 use Framework\Support\DotEnv;
-use Pdo;
+use Framework\Database\Database;
+
+use Framework\Database\QueryBuilder\MysqlQueryBuilder;
+use Framework\Database\Migration\MysqlMigration;
 use InvalidArgumentException;
+use Pdo;
+
 
 class MysqlConnection extends Connection
 {
@@ -14,18 +19,26 @@ class MysqlConnection extends Connection
 
     public function __construct()
     {
-    
         if( empty(getenv('DATABASE_HOST')) || empty(getenv('DATABASE_DB')) || empty(getenv('DATABASE_USER')))
+        {
             throw new InvalidArgumentException('Connection incorrectly configured');
+        }
+       
+        $dbDns = 'mysql:host=' . getenv('DATABASE_HOST') . ';dbname=' . getenv('DATABASE_DB') . ';';
 
-            (new DotEnv())->load();
+        $user = getenv('DATABASE_USER');
+        $pass = getenv('DATABASE_PASSWORD');
 
-            $dbDns = 'mysql:host=' . getenv('DATABASE_HOST') . ';dbname=' . getenv('DATABASE_DB') . ';';
-            echo $dbDns;
-            //$this->pdo = new PDO($dbDns, getenv('DATABASE_USER'), getenv('DATABASE_PASSWORD'));
-            $this->pdo = new PDO($dbDns, 'root', 'superSecr3t');
-            
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $this->database = getenv('DATABASE_DB');
+
+        try 
+        {
+            $this->pdo = new PDO($dbDns, $user, $pass);
+        } 
+        catch (PDOException $e) 
+        {
+            echo $e->getMessage();
+        }
     }
 
     
@@ -37,28 +50,28 @@ class MysqlConnection extends Connection
     
     public function query()
     {
-
+        return new MysqlQueryBuilder($this);
     }
 
 
-    public function creatTabel(string $tabel)
+    public function createTable(string $tabel)
     {
-
+        return new MysqlMigration($this, $tabel, 'create');
     }
 
     
     public function alterTabel(string $tabel)
     {
-
+        return new MysqlMigration($this, $tabel, 'alter');
     }
 
     
     public function getTabel(): array
     {
-        $statement = $this->pdo->prepare("SHOW TABEL");
+        $statement = $this->pdo->prepare("SHOW TABLES");
         $statement->execute();
 
-        $results = $statement->fetchAll(\PDO::FETCH_NUM);
+        $results = $statement->fetchAll(PDO::FETCH_NUM);
         $results = array_map(fn($result)=> $result[0], $results);
 
          return $results;
@@ -82,13 +95,13 @@ class MysqlConnection extends Connection
 
         $statement->execute();
 
-        $dropTabel = $statement->fetchAll(\PDO::FETCH_NUM);
-        $dropTabel = array_map(fn($result)=> $result[0], $dropTabel);
+        $dropTabel = $statement->fetchAll(PDO::FETCH_NUM);
+        $dropTabel = array_map(fn($result) => $result[0], $dropTabel);
 
         $clauses = [
-            'SET FOEIGN_KEY_CHECKS = 0',
+            'SET FOREIGN_KEY_CHECKS = 0',
             ...$dropTabel,
-            'SET FOEIGN_KEY_CHECKS = 1',
+            'SET FOREIGN_KEY_CHECKS = 1',
         ];
 
         $statement = $this->pdo->prepare(join(';', $clauses) . ';');

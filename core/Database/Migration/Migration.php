@@ -1,15 +1,15 @@
 <?php
 
-namespace Framwork\Database\Migration;
+namespace Framework\Database\Migration;
 
-use Framwork\Database\Connection;
-use Framwork\Database\Migration\Field\BoolField;
-use Framwork\Database\Migration\Field\DateTimeField;
-use Framwork\Database\Migration\Field\FloatField;
-use Framwork\Database\Migration\Field\IdField;
-use Framwork\Database\Migration\Field\IntField;
-use Framwork\Database\Migration\Field\StringField;
-use Framwork\Database\Migration\Field\TextField;
+use Framework\Database\Connection;
+use Framework\Database\Migration\Field\BoolField;
+use Framework\Database\Migration\Field\DateTimeField;
+use Framework\Database\Migration\Field\FloatField;
+use Framework\Database\Migration\Field\IdField;
+use Framework\Database\Migration\Field\IntField;
+use Framework\Database\Migration\Field\StringField;
+use Framework\Database\Migration\Field\TextField;
 
 abstract class Migration
 {

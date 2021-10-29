@@ -1,8 +1,8 @@
 <?php
 
-namespace app\Database\Migration\Field;
+namespace Framework\Database\Migration\Field;
 
-use app\Database\Exception\MigrationException;
+use Framework\Database\Exception\MigrationException;
 
 class TextField extends Field
 {

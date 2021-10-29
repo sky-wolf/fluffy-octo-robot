@@ -1,6 +1,6 @@
 <?php
 
-namespace Framwork\Database\QueryBuilder;
+namespace Framework\Database\QueryBuilder;
 
 use Framework\Database\Connection\MysqlConnection;
 

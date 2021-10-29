@@ -1,6 +1,6 @@
 <?php
 
-namespace Framwork\Database\Migration\Field;
+namespace Framework\Database\Migration\Field;
 
 class FloatField extends Field
 {

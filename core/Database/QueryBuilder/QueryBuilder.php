@@ -1,6 +1,6 @@
 <?php
 
-namespace Framwork\Database\QueryBuilder;
+namespace Framework\Database\QueryBuilder;
 
 use Framework\Database\Connection\Connection;
 use Framework\Database\Exception\QueryException;
@@ -25,7 +25,7 @@ abstract class QueryBuilder
         $statement = $this->prepare();
         $statement->execute($this->getWhereValues());
 
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
     protected function getWhereValues() : array
@@ -46,7 +46,7 @@ abstract class QueryBuilder
     /**
      * Prepare a query aginst a particular connection
      */
-    public function prepare($sql) : PDOStatement
+    public function prepare() : PDOStatement
     {
         $query = '';
 
@@ -63,7 +63,7 @@ abstract class QueryBuilder
             $query = $this->compileInsert($query);
         }
 
-        if(enty($query))
+        if(empty($query))
             throw new QueryException('Unrecognised query type');
 
 
@@ -75,9 +75,9 @@ abstract class QueryBuilder
      */
     protected function compileSelect($query): string
     {
-        $jountColumns = join(', ', $this->columns);
+        $jointColumns = join(', ', $this->columns);
 
-        $query .= " SELECT  {$jountColumns} FROME {$this->table}";
+        $query .= " SELECT  {$jointColumns} FROME {$this->table}";
 
         return  $query;
     }
@@ -119,10 +119,10 @@ abstract class QueryBuilder
      */
     protected function compileInsert($query): string
     {
-        $jountColumns = join(', ', $this->columns);
-        $jountPlacehollders = join(', ', array_map(fn($column) => ":{$column}", $this->columns));
+        $jointColumns = join(', ', $this->columns);
+        $jointPlacehollders = join(', ', array_map(fn($column) => ":{$column}", $this->columns));
 
-        $query .= " INSERT INTO {$this->table} {$jountColumns} VALUE {$jountPlacehollders}";
+        $query .= " INSERT INTO {$this->table} ({$jointColumns}) VALUES ({$jointPlacehollders})";
         
         return  $query;
     }
@@ -135,7 +135,7 @@ abstract class QueryBuilder
         $statement = $this->take(1)->prepare();
         $statement->execute($this->getWhereValues());
 
-        $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         if(count($result) === 1)
             return $result[0];
@@ -160,7 +160,8 @@ abstract class QueryBuilder
      */
     public function from(string $table): static
     {
-        $this->tabel = $table;
+        $this->table = $table;
+        echo 'setting tabelname ' . $this->table;
         return $this;
     }
 
