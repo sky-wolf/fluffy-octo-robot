@@ -38,6 +38,11 @@ abstract class Connection
     abstract public function hasTable(string $name): bool;
 
     /**
+     * find out if migrations has row exist
+     */
+    abstract public function inMigration(string $name): bool;
+
+    /**
      * Drop all tables in vurrent database
      */
     abstract public function dropTables(): int;

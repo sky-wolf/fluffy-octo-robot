@@ -36,7 +36,7 @@ class MigrateCommand extends Command
         $pattern = 'Database/Migrations/*.php';
 
         $paths = glob("{$current}/{$pattern}");
-
+        
         if(count($paths) < 1)
         {
             $this->writeln('No migrations found');
@@ -65,15 +65,18 @@ class MigrateCommand extends Command
 
             require $path;
 
-            $output->writeln("Migrating: {$class}");
-
-            $obj = new $class();
-            $obj->migrate($connection);
-
-            $connection
-                ->query()
-                ->from('migrations')
-                ->insert(['name'], ['name' => $class]);
+            if (!$connection->inMigration($class)) 
+            {
+                $obj = new $class();
+                $obj->migrate($connection);
+    
+                $connection
+                    ->query()
+                    ->from('migrations')
+                    ->insert(['name'], ['name' => $class]);
+    
+                $output->writeln("Migrating: {$class}");
+            } 
         }
         
         return Command::SUCCESS;

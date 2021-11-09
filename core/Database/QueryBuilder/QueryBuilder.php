@@ -55,7 +55,7 @@ abstract class QueryBuilder
             $query = $this->compileSelect($query);
             $query = $this->compileWheres($query);
             $query = $this->compileLimit($query);
-
+            echo 'select';
         }
 
         if($this->type === 'insert')
@@ -77,7 +77,7 @@ abstract class QueryBuilder
     {
         $jointColumns = join(', ', $this->columns);
 
-        $query .= " SELECT  {$jointColumns} FROME {$this->table}";
+        $query .= " SELECT  {$jointColumns} FROM {$this->table}";
 
         return  $query;
     }
@@ -161,7 +161,6 @@ abstract class QueryBuilder
     public function from(string $table): static
     {
         $this->table = $table;
-        echo 'setting tabelname ' . $this->table;
         return $this;
     }
 

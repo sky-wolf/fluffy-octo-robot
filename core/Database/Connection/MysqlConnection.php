@@ -84,6 +84,21 @@ class MysqlConnection extends Connection
         return in_array($name, $tabels);
     }
 
+    
+    public function inMigration(string $name): bool
+    {
+        $statement = $this->pdo->prepare("
+            SELECT * FROM `migrations`;
+        ");
+
+        $statement->execute();
+        $results = $statement->fetchAll();
+        $results = array_map(fn($result)=> $result[1], $results);
+
+        return in_array($name, $results, true);
+    }
+
+
    
     public function dropTables(): int
     {

@@ -45,7 +45,7 @@ protected array  $drops = [];
                     {$primaryKey}
                 )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;);
             ";
-        }
+        }/* IF NOT EXISTS  */
 
         if($this->type === 'alter')
         {
@@ -60,7 +60,8 @@ protected array  $drops = [];
         }
 
         $statement = $this->connection->pdo()->prepare($query);
-        $statement->execute();
+        echo $statement->execute();
+
     }
 
     public function StringForField(Field $field): string
